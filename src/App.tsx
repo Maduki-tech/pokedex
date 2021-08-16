@@ -1,11 +1,36 @@
-import {CssBaseline} from "@material-ui/core";
-import Pokecard from "./components/Pokecard";
+import axios from "axios";
+import PokeComponent from "./components/PokeComponent";
+import {useEffect, useState} from "react";
+
+const getAPI = async () => {
+	return axios.get("https://pokeapi.co/api/v2/pokemon/?limit=151")
+		.then((res) => {
+			const {results} = res.data;
+			console.log(results)
+
+			return results;
+		})
+		.catch((err) => {
+			console.error(err)
+		})
+}
+
 
 function App() {
+    const [pokemon, setPokemon] = useState([]);
+
+
+
+	useEffect(() => {
+		getAPI().then(pokis => {
+			setPokemon(pokis);
+
+		})
+	},[])
+
   return (
 	  <div>
-		  <CssBaseline/>
-		  <Pokecard/>
+		  <PokeComponent data={pokemon}/>
 	  </div>
   );
 }
